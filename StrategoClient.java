@@ -213,7 +213,6 @@ public class StrategoClient {
       if (team == 0 && turn == 0 && board.rteam[xpre][ypre] != -1 && board.special[xclick][yclick] == false) {
          for (int i = 1; i < speed + 1 && end == false; i++) {
             if (xpre + i == xclick && ypre == yclick) {
-
                if (board.occupied[xclick][yclick] == false && board.rteam[xclick][yclick] == -1) {
                   boolean b = false;
                   for (int j = 1; j < speed + 1 && b == false; j++) {

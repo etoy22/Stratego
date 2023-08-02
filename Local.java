@@ -5,7 +5,6 @@ import javax.swing.*;
 import helper_functions.FontStyles;
 import helper_functions.ImageLoader;
 
-
 /*
    Quick Travel
    P1 = Attack (attack method)
@@ -42,7 +41,6 @@ public class Local {
    JFrame frame = new JFrame("Stratego");
    Drawing draw = new Drawing();
 
-
    public Local() {
       frame.setSize(1100, 800);
       frame.setResizable(false);
@@ -55,6 +53,48 @@ public class Local {
 
    public static void main(String[] args) {
       new Local();
+   }
+
+   public void winFight(int[][] firstPiece, int[][] secondPiece) {
+      if (board.rteam[xclick][yclick] == 0)
+         screen = 4;
+      else if (board.bteam[xclick][yclick] == 0) {
+         screen = 3;
+      }
+      board.shown[xclick][yclick] = true;
+      board.shown[xpre][ypre] = false;
+      firstPiece[xclick][yclick] = firstPiece[xpre][ypre];
+      secondPiece[xclick][yclick] = -1;
+      firstPiece[xpre][ypre] = -1;
+      board.occupied[xpre][ypre] = false;
+   }
+
+   public void attackHelper(int[][] firstPiece, int[][] secondPiece) {
+      if (firstPiece[xpre][ypre] == secondPiece[xclick][yclick]) {
+         board.shown[xclick][yclick] = false;
+         board.shown[xpre][ypre] = false;
+         board.occupied[xpre][ypre] = false;
+         board.occupied[xclick][yclick] = false;
+         firstPiece[xpre][ypre] = -1;
+         secondPiece[xclick][yclick] = -1;
+      }
+      // Miner attacking a bomb
+      else if (firstPiece[xpre][ypre] == 3 && secondPiece[xclick][yclick] == 11) {
+         winFight(firstPiece, secondPiece);
+      }
+      // Spy attacking a level 10
+      else if (firstPiece[xpre][ypre] == 1 && secondPiece[xclick][yclick] == 10) {
+         winFight(firstPiece, secondPiece);
+      } else if (firstPiece[xpre][ypre] > secondPiece[xclick][yclick]) {
+         winFight(firstPiece, secondPiece);
+      // Loses
+      // TESTING FIX
+      } else if(firstPiece[xpre][ypre] < secondPiece[xclick][yclick]) {
+         board.shown[xclick][yclick] = true;
+         board.shown[xpre][ypre] = false;
+         secondPiece[xpre][ypre] = -1;
+         board.occupied[xpre][ypre] = false;
+      }
    }
 
    /***
@@ -70,95 +110,10 @@ public class Local {
        * As such there is no need to write code if you lose the battle
        */
       if (team == 0 && turn == 0 && board.rteam[xpre][ypre] != 11) {
-         /*
-          * Checks if the peices are of the same value
-          * If they are both pieces are elliminated
-          * 
-          * attacker = board.rteam[xpre][ypre]+1;
-          * defender = -board.bteam[xclick][yclick]-1;
-          */
-
-         if (board.rteam[xpre][ypre] == board.bteam[xclick][yclick]) {
-            board.shown[xclick][yclick] = false;
-            board.shown[xpre][ypre] = false;
-            board.occupied[xpre][ypre] = false;
-            board.occupied[xclick][yclick] = false;
-            board.bteam[xclick][yclick] = -1;
-            board.rteam[xpre][ypre] = -1;
-         }
-         /*
-          * First Case: A miner attacking a bomb
-          * Second Case: a spy attacks a level 10
-          * Third Case: Win by level
-          */
-         else if (board.rteam[xpre][ypre] == 3 && board.bteam[xclick][yclick] == 11 || board.rteam[xpre][ypre] == 1
-               && board.bteam[xclick][yclick] == 10 || board.rteam[xpre][ypre] > board.bteam[xclick][yclick]) {
-            if (board.bteam[xclick][yclick] == 0)
-               screen = 3;
-            board.shown[xclick][yclick] = true;
-            board.shown[xpre][ypre] = false;
-            board.rteam[xclick][yclick] = board.rteam[xpre][ypre];
-            board.bteam[xclick][yclick] = -1;
-            board.rteam[xpre][ypre] = -1;
-            board.occupied[xpre][ypre] = false;
-         } else {
-            board.shown[xclick][yclick] = true;
-            board.shown[xpre][ypre] = false;
-            board.rteam[xpre][ypre] = -1;
-            board.occupied[xpre][ypre] = false;
-         }
+         attackHelper(board.rteam, board.bteam);
 
       } else if (team == 1 && turn == 1 && board.bteam[xpre][ypre] != 11) {
-         /*
-          * Checks if the peices are of the same value
-          * If they are both pieces are elliminated
-          */
-         // attacker = board.rteam[xpre][ypre]+1;
-         // defender = -board.bteam[xclick][yclick]-1;
-         if (board.bteam[xpre][ypre] == board.rteam[xclick][yclick]) {
-            board.shown[xclick][yclick] = false;
-            board.shown[xpre][ypre] = false;
-            board.occupied[xpre][ypre] = false;
-            board.occupied[xclick][yclick] = false;
-            board.rteam[xclick][yclick] = -1;
-            board.bteam[xpre][ypre] = -1;
-         }
-         /*
-          * First Case: A miner attacking a bomb
-          * Second Case: a spy attacks a level 10
-          * Third Case: Win by level
-          */
-         else if (board.bteam[xpre][ypre] == 3 && board.rteam[xclick][yclick] == 11) {
-            board.shown[xclick][yclick] = true;
-            board.shown[xpre][ypre] = false;
-            board.bteam[xclick][yclick] = board.bteam[xpre][ypre];
-            board.rteam[xclick][yclick] = -1;
-            board.bteam[xpre][ypre] = -1;
-            board.occupied[xpre][ypre] = false;
-         } else if (board.bteam[xpre][ypre] == 1 && board.rteam[xclick][yclick] == 10) {
-            board.shown[xclick][yclick] = true;
-            board.shown[xpre][ypre] = false;
-            board.bteam[xclick][yclick] = board.bteam[xpre][ypre];
-            board.rteam[xclick][yclick] = -1;
-            board.bteam[xpre][ypre] = -1;
-            board.occupied[xpre][ypre] = false;
-
-         } else if (board.bteam[xpre][ypre] > board.rteam[xclick][yclick]) {
-            if (board.rteam[xclick][yclick] == 0)
-               screen = 4;
-            board.shown[xclick][yclick] = true;
-            board.shown[xpre][ypre] = false;
-            board.bteam[xclick][yclick] = board.bteam[xpre][ypre];
-            board.rteam[xclick][yclick] = -1;
-            board.bteam[xpre][ypre] = -1;
-            board.occupied[xpre][ypre] = false;
-         } else {
-            board.shown[xclick][yclick] = true;
-            board.shown[xpre][ypre] = false;
-            board.bteam[xpre][ypre] = -1;
-            board.occupied[xpre][ypre] = false;
-         }
-
+         attackHelper(board.bteam, board.rteam);
       }
 
       boolean rcount = true;
@@ -191,13 +146,13 @@ public class Local {
       boolean end = false;
       int speed = board.speed[xpre][ypre];
       // Checks to make sure its the red player on the red players turn
-      if (team == 0 && turn == 0 && board.rteam[xpre][ypre] != -1 && board.special[xclick][yclick]) {
-         for (int i = 1; i < speed + 1 && end; i++) {
+      if (team == 0 && turn == 0 && board.rteam[xpre][ypre] != -1 && !board.special[xclick][yclick]) {
+         for (int i = 1; i < speed + 1 && !end; i++) {
             if (xpre + i == xclick && ypre == yclick) {
 
-               if (board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre + j <= 9) {
                         if (board.occupied[j + xpre][ypre] && j + xpre != xclick) {
                            b = true;
@@ -215,7 +170,7 @@ public class Local {
                   }
                } else if (board.rteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre + j <= 9) {
                         if (board.occupied[j + xpre][ypre] && j + xpre != xclick) {
                            b = true;
@@ -227,10 +182,9 @@ public class Local {
                   }
                }
             } else if (xpre - i == xclick && ypre == yclick) {
-
-               if (board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre - j >= 0) {
                         if (board.occupied[xpre - j][ypre] && xpre - j != xclick) {
                            b = true;
@@ -248,7 +202,7 @@ public class Local {
                   }
                } else if (board.rteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre - j >= 0) {
                         if (board.occupied[xpre - j][ypre] && xpre - j != xclick) {
                            b = true;
@@ -262,9 +216,9 @@ public class Local {
                }
             } else if (xpre == xclick && ypre + i == yclick) {
 
-               if (board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre + j >= 0) {
                         if (board.occupied[xpre][ypre + j] && j + ypre != yclick) {
                            b = true;
@@ -283,7 +237,7 @@ public class Local {
 
                } else if (board.rteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre + j >= 0) {
                         if (board.occupied[xpre][ypre + j] && ypre + j != yclick) {
                            b = true;
@@ -297,10 +251,10 @@ public class Local {
                }
             } else if (xpre == xclick && ypre - i == yclick) {
 
-               if (board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.rteam[xclick][yclick] == -1) {
 
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre - j >= 0) {
                         if (board.occupied[xpre][ypre - j] && ypre - j != yclick) {
                            b = true;
@@ -318,7 +272,7 @@ public class Local {
                   }
                } else if (board.rteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre + j >= 0) {
                         if (board.occupied[xpre][ypre - j] && ypre - j != yclick) {
                            b = true;
@@ -331,13 +285,13 @@ public class Local {
                }
             }
          }
-      } else if (team == 1 && turn == 1 && board.bteam[xpre][ypre] != -1 && board.special[xclick][yclick]) {
-         for (int i = 1; i < speed + 1 && end; i++) {
+      } else if (team == 1 && turn == 1 && board.bteam[xpre][ypre] != -1 && !board.special[xclick][yclick]) {
+         for (int i = 1; i < speed + 1 && !end; i++) {
             if (xpre + i == xclick && ypre == yclick) {
 
-               if (board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre + j <= 9) {
                         if (board.occupied[j + xpre][ypre] && j + xpre != xclick) {
                            b = true;
@@ -348,14 +302,13 @@ public class Local {
                            board.speed[xpre][ypre] = 1;
                            board.bteam[xclick][yclick] = board.bteam[xpre][ypre];
                            board.bteam[xpre][ypre] = -1;
-                           ;
                            end = true;
                         }
                      }
                   }
                } else if (board.bteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre + j <= 9) {
                         if (board.occupied[j + xpre][ypre] && j + xpre != xclick) {
                            b = true;
@@ -368,9 +321,9 @@ public class Local {
                }
             } else if (xpre - i == xclick && ypre == yclick) {
 
-               if (board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre - j >= 0) {
                         if (board.occupied[xpre - j][ypre] && xpre - j != xclick) {
                            b = true;
@@ -388,7 +341,7 @@ public class Local {
                   }
                } else if (board.bteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (xpre - j >= 0) {
                         if (board.occupied[xpre - j][ypre] && xpre - j != xclick) {
                            b = true;
@@ -401,9 +354,9 @@ public class Local {
                }
             } else if (xpre == xclick && ypre + i == yclick) {
 
-               if (board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre + j >= 0) {
                         if (board.occupied[xpre][ypre + j] && j + ypre != yclick) {
                            b = true;
@@ -422,7 +375,7 @@ public class Local {
 
                } else if (board.bteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre + j >= 0) {
                         if (board.occupied[xpre][ypre + j] && ypre + j != yclick) {
                            b = true;
@@ -435,10 +388,10 @@ public class Local {
                }
             } else if (xpre == xclick && ypre - i == yclick) {
 
-               if (board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
+               if (!board.occupied[xclick][yclick] && board.bteam[xclick][yclick] == -1) {
 
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre - j >= 0) {
                         if (board.occupied[xpre][ypre - j] && ypre - j != yclick) {
                            b = true;
@@ -456,7 +409,7 @@ public class Local {
                   }
                } else if (board.bteam[xclick][yclick] == -1 && board.occupied[xclick][yclick]) {
                   boolean b = false;
-                  for (int j = 1; j < speed + 1 && b; j++) {
+                  for (int j = 1; j < speed + 1 && !b; j++) {
                      if (ypre + j >= 0) {
                         if (board.occupied[xpre][ypre - j] && ypre - j != yclick) {
                            b = true;
@@ -593,7 +546,7 @@ public class Local {
                g.setFont(FontStyles.MonoFont30);
                g.setColor(Color.BLUE);
                g.drawString("Blue Player must place", 50, 40);
-            } else if ((bChoose || rChoose) == false && turn == 0) {
+            } else if (!(bChoose || rChoose) && turn == 0) {
                g.setFont(FontStyles.MonoFont30);
                g.setColor(Color.RED);
                g.drawString("Red Player's Turn", 50, 40);
@@ -607,7 +560,8 @@ public class Local {
 
             // do{ //Placing
             if (rChoose && team == 0) {
-               doneChoosing = 0;
+               // CHANGE BACK TO 0 AFTER TESTING
+               doneChoosing = 11;
                for (int a = 0; a < 12; a++) {
                   if (selectAmount[a] == 0) {
                      doneChoosing += 1;
@@ -661,10 +615,8 @@ public class Local {
             }
             // while(rChoose );
 
-            // System.out.println(""+bChoose);
-
             if (bChoose && team == 1) {
-               doneChoosing = 0;
+               doneChoosing = 11;
                for (int a = 0; a < 12; a++) {
                   if (selectAmount[a] == 0) {
                      doneChoosing += 1;
@@ -730,7 +682,7 @@ public class Local {
                         repaint();
                      }
 
-                     else if (board.occupied[xclick][yclick]) {
+                     else if (!board.occupied[xclick][yclick]) {
                         remove = false;
                         repaint();
                      } else {
@@ -741,16 +693,15 @@ public class Local {
             } catch (Exception e) {
             }
 
-            // Font FontStyles.MonoFont = new Font("Monospaced",Font.BOLD,20);
-            // g.setFont(FontStyles.MonoFont);
-            //
-            // g.setColor(Color.BLACK);
-            // g.fillRect(800,710,100,30);
-            //
-            // g.setColor(Color.WHITE);
-            // g.drawString("Remove",810,730);
+            g.setFont(FontStyles.MonoFont20);
 
-            if (rChoose && bChoose) {
+            g.setColor(Color.BLACK);
+            g.fillRect(800, 710, 100, 30);
+
+            g.setColor(Color.WHITE);
+            g.drawString("Remove", 810, 730);
+
+            if (!rChoose && !bChoose) {
                remove = false;
                gameStart = true;
             }
@@ -864,7 +815,19 @@ public class Local {
                         }
                      }
                      end = false;
-                     for (int r = 1; r < board.speed[xclick][yclick] + 1 && end && r + yclick < 10; r++) {
+                     for (int r = 1; r < board.speed[xclick][yclick] + 1 && !end && r + yclick < 10; r++) {
+                        if (board.bteam[xclick][yclick + r] != -1 || board.special[xclick][yclick + r]) {
+                           end = true;
+                        } else {
+                           g.setColor(Color.green);
+                           if (board.occupied[xclick - r][yclick]) {
+                              end = true;
+                              g.setColor(Color.orange);
+                           }
+                        }
+                     }
+                     end = false;
+                     for (int r = 1; r < board.speed[xclick][yclick] + 1 && !end && r + yclick < 10; r++) {
                         if (board.bteam[xclick][yclick + r] != -1 || board.special[xclick][yclick + r]) {
                            end = true;
                         } else {
@@ -878,7 +841,7 @@ public class Local {
                         }
                      }
                      end = false;
-                     for (int r = 1; r < board.speed[xclick][yclick] + 1 && end && yclick - r >= 0; r++) {
+                     for (int r = 1; r < board.speed[xclick][yclick] + 1 && !end && yclick - r >= 0; r++) {
                         if (board.bteam[xclick][yclick - r] != -1 || board.special[xclick][yclick - r]) {
                            end = true;
                         } else {
@@ -897,7 +860,6 @@ public class Local {
          }
 
          // Win Screens and Change Turn Screen
-
          if (screen == 2) {
             frame.getContentPane().setBackground(Color.BLACK);
 
@@ -935,10 +897,12 @@ public class Local {
             // Used to put the pieces on the board
             for (int i = 0; i < 10; i++) {
                for (int j = 0; j < 10; j++) {
-                  // Makes it so that you can see your own pieces and those revealed for the other team
+                  // Makes it so that you can see your own pieces and those revealed for the other
+                  // team
                   if (board.shown[i][j] || team == 0) {
                      if (board.rteam[i][j] >= 0 && board.rteam[i][j] <= 11)
-                        g.drawImage(ImageLoader.getRed()[board.rteam[i][j]].getImage(), board.loc[i] + 5, board.loc[j] + 5, 60, 60, this);
+                        g.drawImage(ImageLoader.getRed()[board.rteam[i][j]].getImage(), board.loc[i] + 5,
+                              board.loc[j] + 5, 60, 60, this);
                   }
                   // Makes it if you are on the other side you can't see the pieces if they are
                   // not revealed
@@ -949,12 +913,14 @@ public class Local {
                   // team
                   if (board.shown[i][j] || team == 1) {
                      if (board.bteam[i][j] >= 0 && board.bteam[i][j] <= 11)
-                        g.drawImage(ImageLoader.getBlue()[board.bteam[i][j]].getImage(), board.loc[i] + 5, board.loc[j] + 5, 60, 60, this);
+                        g.drawImage(ImageLoader.getBlue()[board.bteam[i][j]].getImage(), board.loc[i] + 5,
+                              board.loc[j] + 5, 60, 60, this);
                   }
                   // Makes it if you are on the other side you can't see the pieces if they are
                   // not revealed
                   else if (board.bteam[i][j] != -1)
-                     g.drawImage(ImageLoader.getBlue()[12].getImage(), board.loc[i] + 5, board.loc[j] + 5, 60, 60, this);
+                     g.drawImage(ImageLoader.getBlue()[12].getImage(), board.loc[i] + 5, board.loc[j] + 5, 60, 60,
+                           this);
                }
 
             }
@@ -989,15 +955,12 @@ public class Local {
                }
             }
 
-            boolean b = true;
+            boolean onScreenClick = true;
 
-            if (x == -1)
-               b = false;
+            if (x == -1 || y == -1)
+               onScreenClick = false;
 
-            if (y == -1)
-               b = true;
-
-            if (b) {
+            if (onScreenClick) {
                xpre = xclick;
                ypre = yclick;
                xclick = x;
@@ -1007,12 +970,6 @@ public class Local {
                   move();
                }
             }
-
-            // }
-            // else{
-            // xclick = -1;
-            // yclick = -1;
-            // }
 
          } else if (screen == 2)
             screen = 1;
@@ -1039,6 +996,7 @@ public class Local {
       }
 
    }
+
    // Method to place pieces
    void placePiece() {
       if (selectValue >= 0 && selectAmount[selectValue] > 0) {
@@ -1054,7 +1012,7 @@ public class Local {
             }
             board.setPiece(xclick, yclick, team, selectValue);
             selectAmount[selectValue] -= 1;
-            if (selectAmount[selectValue]<=0){
+            if (selectAmount[selectValue] <= 0) {
                selectValue = -1;
             }
          }

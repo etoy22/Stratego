@@ -109,8 +109,6 @@ public class Board
       else if (player == 1){
          bteam[x][y] = piece;
       }
-      else{
-      }
    }
    
    boolean canPlace(int x, int y, int player){
