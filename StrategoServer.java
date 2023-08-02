@@ -53,21 +53,6 @@ public class StrategoServer
    
    public StrategoServer()throws IOException
    {
-   //       selectToPlace[0] = 0; //Flag
-   //       selectToPlace[1] = 1; //Spy
-   //       selectToPlace[2] = 2;
-   //       selectToPlace[3] = 3;
-   //       selectToPlace[4] = 4;
-   //       selectToPlace[5] = 5;
-   //       selectToPlace[6] = 6;
-   //       selectToPlace[7] = 7;
-   //       selectToPlace[8] = 8;
-   //       selectToPlace[9] = 9;
-   //       selectToPlace[10] = 10;
-   //       selectToPlace[11] = 11; //Bomb
-      
-      
-      
       frame.setSize(1100,800);
       frame.setResizable(false);
       frame.add(draw);
