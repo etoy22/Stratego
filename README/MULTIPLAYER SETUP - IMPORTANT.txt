@@ -1,0 +1,12 @@
+IMPORTANT!!!
+
+1. To setup a multiplayer game, StrategoServer must be run first. The computer which runs this is known as the HOST
+2. After opening the server, run StrategoClient on the other computer. This computer is known as the CLIENT
+3. On the HOST computer, click "This PC" (Top left icon) and give the name of the computer to the person running 
+	StrategoClient (The name begins with C-)
+4.When prompted, the CLIENT must input the name of the HOST. (CAPS MATTER!!! DON'T FORGET THE C- AT THE BEGINNING)
+	(If the name is input incorrectly, you must rerun StrategoServer and StrategoClient in the same order)
+5.HOST must place their pieces first, then client can place their pieces.
+6.Rules are the same as local
+7.Play as normal
+8.Have fun!!!

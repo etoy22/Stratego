@@ -1,0 +1,50 @@
+/////////////////////////////////////////////////////
+Stratego
+
+By: Ethan Leider and Manny Sun
+
+////////////////////////////////////////////////////
+
+The goal of Stratego is to capture the flag of your opponent while defending your own flag.
+To capture the flag you use your army of 40
+Pieces have a rank and represent individual officers and soldiers in an army. 
+In addition to those ranked pieces you can use bombs to protect your flag.
+
+Setup
+- The Stratego board consists of 10 x 10 squares. Players set their pieces up in the bottom four rows that are closest to them.  
+
+- Place the pieces
+
+Moving
+- Pieces move one square per turn, horizontally or vertically and not diagonally. (Except scouts special rules bellow)
+- Pieces cannot jump over another piece. 
+- Playing pieces are not permitted to move into the two lake obstacles (2 x 2 squares each) in the center of the board. 
+- Bombs and flags may never move.
+
+Attacking
+- If a piece is moved onto a square occupied by an opposing piece, their identities are revealed. 
+- The lower rank (lower number piece) is removed from the board, and the higher rank (higher number piece)
+	is moved into the place formerly occupied by the weaker piece
+- If the engaging pieces are of equal rank, they are both removed. 
+- Pieces may not move onto a square already occupied by another piece without attacking.
+
+Special Pieces
+
+Bombs
+- The bombs cannot be moved. 
+- A bomb defeats every piece that tries to attack it, except the miner (3).
+- Bombs remain on the field after defeating pieces until they are defused. 
+- Bombs lose when they are attacked (defused) by a miner.
+
+Flag
+- The flag cannot be moved and loses an attack from every other piece. 
+- When you capture the flag of your opponent you win the game.
+
+Scouts
+- Scouts can jump/move over an unlimited number of empty squares in a straight line to the left, right, forward or backward.
+- They cannot jump over any pieces (friendly or enemy) and cannot jump over the lakes.
+- Scouts are the only pieces that can launch an attack from a sizeable distance, but it must be in a straight line. 
+
+Spy
+- Exception to the rule of the higher rank winning is the spy.
+- When the spy attacks the marshal, the spy defeats the higher ranked marshal. However, when the marshal attacks the spy, the spy loses. 
