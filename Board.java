@@ -4,13 +4,13 @@ import javax.swing.*;
 
 public class Board
 {
-   int rteam [][] = new int [10][10];
-   int bteam [][] = new int [10][10];
-   boolean occupied [][] = new boolean [10][10];
-   boolean special [][] = new boolean [10][10];
-   boolean shown [][] = new boolean [10][10];
-   int speed[][] = new int [10][10];
-   int loc [] = new int [11];
+   int[][] rteam  = new int [10][10];
+   int[][] bteam  = new int [10][10];
+   boolean[][] occupied = new boolean [10][10];
+   boolean[][] special = new boolean [10][10];
+   boolean[][] shown = new boolean [10][10];
+   int[][] speed= new int [10][10];
+   int[] loc = new int [11];
    boolean first = true;
    
    public Board ()
@@ -108,8 +108,6 @@ public class Board
       }
       else if (player == 1){
          bteam[x][y] = piece;
-      }
-      else{
       }
    }
    
